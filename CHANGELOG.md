@@ -1,6 +1,6 @@
 # Change Log - @sync-labs/eslint-config
 
-## 2.1.1 Forked from rushstack/eslint-config
+## 2.1.5 Forked from rushstack/eslint-config
 Tue, 28 Sep 2020 05:45:56 GMT
 
 ## 2.1.1

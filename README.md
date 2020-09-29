@@ -1,4 +1,4 @@
-# @rushstack/eslint-config
+# @sync-labs/eslint-config
 
 A TypeScript ESLint ruleset designed for large teams and projects.
 
@@ -21,21 +21,21 @@ reflect different priorities:
 there's a risk of fragmentation, duplication of efforts, and costly rewrites.  (Enabling people to churn out
 lots of code really fast is still a goal of course; just not the #1 priority.)
 
-Welcome to the world of [Rush Stack](https://rushstack.io/)!  The `@rushstack/eslint-config` package was specifically
+Welcome to the world of [Rush Stack](https://rushstack.io/)!  The `@sync-labs/eslint-config` package was specifically
 designed around the the requirements of large teams and projects.
 
 
 ## Implementation
 
-- **Monorepo friendly:** The `@rushstack/eslint-config` package has direct dependencies on all the ESLint plugins
+- **Monorepo friendly:** The `@sync-labs/eslint-config` package has direct dependencies on all the ESLint plugins
   that it needs.  This avoids encumbering each consuming project with the obligation to satisfy a peer dependencies.
   It also ensures that the installed plugin versions were tested for compatibility together.
 
-- **Battle tested:**  The `@rushstack/eslint-config` rules have been vetted on large production monorepos, across
+- **Battle tested:**  The `@sync-labs/eslint-config` rules have been vetted on large production monorepos, across
   a broad set of projects, teams, and requirements.  These rules embody a way of working that scales.  Quite
   a lot of discussion and evolution went into them.
 
-- **Designed for Prettier:** The `@rushstack/eslint-config` ruleset is designed to be used together with
+- **Designed for Prettier:** The `@sync-labs/eslint-config` ruleset is designed to be used together with
   the [Prettier](https://prettier.io/) code formatter.  This separation of workflows avoids hassling developers with
   lint "errors" for frivolous issues like spaces and commas.  Instead, those issues get fixed automatically whenever
   you save or commit a file.  Prettier also avoids frivolous debates: its defaults have already been debated
@@ -67,7 +67,7 @@ To install the package, do this:
 $ cd your-project-folder
 $ npm install --save-dev eslint
 $ npm install --save-dev typescript
-$ npm install --save-dev @rushstack/eslint-config
+$ npm install --save-dev @sync-labs/eslint-config
 ```
 
 ### 2. Choose one profile
@@ -75,18 +75,18 @@ $ npm install --save-dev @rushstack/eslint-config
 The ruleset currently supports three different "profile" strings, which select lint rules applicable for
 your project:
 
-- `@rushstack/eslint-config/profile/node` - This profile enables lint rules intended for a general Node.js project,
+- `@sync-labs/eslint-config/profile/node` - This profile enables lint rules intended for a general Node.js project,
   typically a web service.  It enables security rules that assume the service could receive malicious inputs from an
   untrusted user.
 
-- `@rushstack/eslint-config/profile/node-trusted-tool` - This profile enables lint rules intended for a Node.js project
+- `@sync-labs/eslint-config/profile/node-trusted-tool` - This profile enables lint rules intended for a Node.js project
   whose inputs will always come from a developer or other trusted source.  Most build system tasks are like this,
   since they operate exclusively on files prepared by a developer.  This profile disables certain security rules that
   would otherwise prohibit APIs that could cause a denial-of-service by consuming too many resources, or which might
   interact with the filesystem in unsafe ways.  Such activities are safe and commonplace for a trusted tool.
   **DO NOT use this profile for a library project that might also be loaded by a Node.js service.**
 
-- `@rushstack/eslint-config/profile/web-app` - This profile enables lint rules intended for a web application, for
+- `@sync-labs/eslint-config/profile/web-app` - This profile enables lint rules intended for a web application, for
   example security rules that are relevant to web browser APIs such as DOM.
   _Also use this profile if you are creating a library that can be consumed by both Node.js and web applications._
 
@@ -96,15 +96,15 @@ for TypeScript. Add your profile string in the `extends` field, as shown below:
 **.eslintrc.js**
 ```ts
 // This is a workaround for https://github.com/eslint/eslint/issues/3458
-require('@rushstack/eslint-config/patch/modern-module-resolution');
+require('@sync-labs/eslint-config/patch/modern-module-resolution');
 
 module.exports = {
-  extends: [ "@rushstack/eslint-config/profile/node" ],  // <---- put your profile string here
+  extends: [ "@sync-labs/eslint-config/profile/node" ],  // <---- put your profile string here
   parserOptions: { tsconfigRootDir: __dirname }
 };
 ```
 
-The `@rushstack/eslint-config` ruleset is intended to be used with the Prettier code formatter.  For general
+The `@sync-labs/eslint-config` ruleset is intended to be used with the Prettier code formatter.  For general
 instructions on setting that up, please refer to the [Prettier docs](https://prettier.io/docs/en/index.html).
 For Rush-specific settings, see the article
 [Rush: Enabling Prettier](https://rushjs.io/pages/maintainer/enabling_prettier/).
@@ -117,9 +117,9 @@ Optionally, you can add some "mixins" to your `extends` array to opt-in to some 
 Important: Your **.eslintrc.js** `"extends"` field must load mixins after the profile entry.
 
 
-#### `@rushstack/eslint-config/mixins/react`
+#### `@sync-labs/eslint-config/mixins/react`
 
-For projects using the [React](https://reactjs.org/) library, the `"@rushstack/eslint-config/mixins/react"` mixin
+For projects using the [React](https://reactjs.org/) library, the `"@sync-labs/eslint-config/mixins/react"` mixin
 enables some recommended additional rules.  These rules are selected via a mixin because they require you to:
 
 - Add `"jsx": "react"` to your **tsconfig.json**
@@ -133,12 +133,12 @@ Add the mixin to your `"extends"` field like this:
 **.eslintrc.js**
 ```ts
 // This is a workaround for https://github.com/eslint/eslint/issues/3458
-require('@rushstack/eslint-config/patch/modern-module-resolution');
+require('@sync-labs/eslint-config/patch/modern-module-resolution');
 
 module.exports = {
   extends: [
-    "@rushstack/eslint-config/profile/web-app",
-    "@rushstack/eslint-config/mixins/react" // <----
+    "@sync-labs/eslint-config/profile/web-app",
+    "@sync-labs/eslint-config/mixins/react" // <----
   ],
   parserOptions: { tsconfigRootDir: __dirname },
 
@@ -150,79 +150,11 @@ module.exports = {
 };
 ```
 
-#### `@rushstack/eslint-config/mixins/friendly-locals`
-
-Requires explicit type declarations for local variables.
-
-For the first 5 years of Rush, our lint rules required explicit types for most declarations
-such as function parameters, function return values, and exported variables.  Although more verbose,
-declaring types (instead of relying on type inference) encourages engineers to create interfaces
-that inspire discussions about data structure design.  It also makes source files easier
-to understand for code reviewers who may be unfamiliar with a particular project.  Once developers get
-used to the extra work of declaring types, it turns out to be a surprisingly popular practice.
-
-However in 2020, to make adoption easier for existing projects, this rule was relaxed.  Explicit
-type declarations are now optional for local variables (although still required in other contexts).
-See [GitHub #2206](https://github.com/microsoft/rushstack/issues/2206) for background.
-
-If you are onboarding a large existing code base, this new default will make adoption easier:
-
-Example source file without `mixins/friendly-locals`:
-```ts
-export class MyDataService {
-  . . .
-  public queryResult(provider: IProvider): IResult {
-    // Type inference is concise, but what are "item", "index", and "data"?
-    const item = provider.getItem(provider.title);
-    const index = item.fetchIndex();
-    const data = index.get(provider.state);
-    return data.results.filter(x => x.title === provider.title);
-  }
-}
-```
-
-On the other hand, if your priority is make source files more friendly for other people to read, you can enable
-the `"@rushstack/eslint-config/mixins/friendly-locals"` mixin.  This restores the requirement that local variables
-should have explicit type declarations.
-
-Example source file with `mixins/friendly-locals`:
-```ts
-export class MyDataService {
-  . . .
-  public queryResult(provider: IProvider): IResult {
-    // This is more work for the person writing the code... but definitely easier to understand
-    // for a code reviewer if they are unfamiliar with your project
-    const item: ISalesReport = provider.getItem(provider.title);
-    const index: Map<string, IGeographicData> = item.fetchIndex();
-    const data: IGeographicData | undefined = index.get(provider.state);
-    return data.results.filter(x => x.title === provider.title);
-  }
-}
-```
-
-Add the mixin to your `"extends"` field like this:
-
-**.eslintrc.js**
-```ts
-// This is a workaround for https://github.com/eslint/eslint/issues/3458
-require('@rushstack/eslint-config/patch/modern-module-resolution');
-
-module.exports = {
-  extends: [
-    "@rushstack/eslint-config/profile/node",
-    "@rushstack/eslint-config/profile/mixins/friendly-locals" // <----
-  ],
-  parserOptions: { tsconfigRootDir: __dirname }
-};
-```
-
-
-
-#### `@rushstack/eslint-config/mixins/tsdoc`
+#### `@sync-labs/eslint-config/mixins/tsdoc`
 
 If your project is using [API Extractor](https://api-extractor.com/) or another tool that uses
 the [TSDoc](https://github.com/Microsoft/tsdoc) standard for doc comments, it's recommended to use the
-`"@rushstack/eslint-config/mixins/tsdoc"` mixin.  It will enable
+`"@sync-labs/eslint-config/mixins/tsdoc"` mixin.  It will enable
 [eslint-plugin-tsdoc](https://www.npmjs.com/package/eslint-plugin-tsdoc) validation for TypeScript doc comments.
 
 Add the mixin to your `"extends"` field like this:
@@ -230,12 +162,12 @@ Add the mixin to your `"extends"` field like this:
 **.eslintrc.js**
 ```ts
 // This is a workaround for https://github.com/eslint/eslint/issues/3458
-require('@rushstack/eslint-config/patch/modern-module-resolution');
+require('@sync-labs/eslint-config/patch/modern-module-resolution');
 
 module.exports = {
   extends: [
-    "@rushstack/eslint-config/profile/node",
-    "@rushstack/eslint-config/profile/mixins/tsdoc" // <----
+    "@sync-labs/eslint-config/profile/node",
+    "@sync-labs/eslint-config/profile/mixins/tsdoc" // <----
   ],
   parserOptions: { tsconfigRootDir: __dirname }
 };
@@ -244,5 +176,4 @@ module.exports = {
 
 ## Learn more
 
-This package is part of the Rush Stack project.  Please visit [https://rushstack.io/](https://rushstack.io/)
-for more guidance as well as [help resources](https://rushstack.io/pages/help/support/).
+This package was forked from Microsoft's Rush Stack project and adapted to Sync Labs guidelines.
