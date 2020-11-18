@@ -61,10 +61,11 @@ function buildRules(profile) {
 
         rules: {
           'prettier/prettier': ['error', {
-            "trailingComma": "es5",
-            "tabWidth": 4,
+            "tabWidth": 2,
             "semi": false,
-            "singleQuote": true
+            "singleQuote": true,
+            "trailingComma": "none",
+            "endOfLine": "auto"
           }],
           
           // ====================================================================
