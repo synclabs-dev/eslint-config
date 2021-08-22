@@ -26,7 +26,7 @@ const macros = require('./_macros');
 function buildRules(profile) {
   return {
     // Disable the parser by default
-    parser: '',
+    "parser": '',
 
     plugins: [
       // Plugin documentation: https://www.npmjs.com/package/@rushstack/eslint-plugin
@@ -38,10 +38,36 @@ function buildRules(profile) {
       // Plugin documentation: https://www.npmjs.com/package/eslint-plugin-promise
       'eslint-plugin-promise',
       // SYNC-LABS Plugin documentation https://github.com/prettier/eslint-plugin-prettier
-      'eslint-plugin-prettier'
+      'eslint-plugin-prettier',
+      // SYNC-LABS Plugin documentation  https://www.npmjs.com/package/eslint-plugin-import
+      'eslint-plugin-import'
     ],
 
     overrides: [
+      {
+        // Declare an override that applies to TypeScript files only
+        files: ['*.js', '*.jsx'],
+        parser: '@typescript-eslint/parser',
+        parserOptions: {
+          "ecmaVersion": 2018,
+          "env": {
+            "es6": true
+          },
+          "sourceType": "module",
+          "allowImportExportEverywhere": true
+        },
+        rules: {
+          'prettier/prettier': ['error', {
+            "usePrettierrc": false,
+            "tabWidth": 2,
+            "semi": false,
+            "singleQuote": true,
+            "trailingComma": "none",
+            "endOfLine": "auto"
+          }],
+
+        }
+      },
       {
         // Declare an override that applies to TypeScript files only
         files: ['*.ts', '*.tsx'],
@@ -61,22 +87,20 @@ function buildRules(profile) {
 
         rules: {
           'prettier/prettier': ['error', {
+            "usePrettierrc": false,
             "tabWidth": 2,
             "semi": false,
             "singleQuote": true,
             "trailingComma": "none",
             "endOfLine": "auto"
           }],
-          
+
           // ====================================================================
           // CUSTOM RULES
           // ====================================================================
 
           // The @rushstack rules are documented in the package README:
           // https://www.npmjs.com/package/@rushstack/eslint-plugin
-
-          // RATIONALE:         See the @rushstack/eslint-plugin documentation
-          '@rushstack/no-new-null': 'warn',
 
           // RATIONALE:         See the @rushstack/eslint-plugin documentation
           '@rushstack/typedef-var': 'warn',
@@ -127,14 +151,6 @@ function buildRules(profile) {
                 Symbol: {
                   message: 'Use "symbol" instead',
                   fixWith: 'symbol'
-                },
-                Function: {
-                  message: [
-                    'The "Function" type accepts any function-like value.',
-                    'It provides no type safety when calling the function, which can be a common source of bugs.',
-                    'It also accepts things like class declarations, which will throw at runtime as they will not be called with "new".',
-                    'If you are expecting the function to accept certain arguments, you should explicitly define the function shape.'
-                  ].join('\n')
                 }
 
                 // This is a good idea, but before enabling it we need to put some thought into the recommended
@@ -158,21 +174,6 @@ function buildRules(profile) {
           //                    because code is more readable when it is built from stereotypical forms
           //                    (interfaces, enums, functions, etc.) instead of freeform type algebra.
           '@typescript-eslint/consistent-type-definitions': 'warn',
-
-          // RATIONALE:         Code is more readable when the type of every variable is immediately obvious.
-          //                    Even if the compiler may be able to infer a type, this inference will be unavailable
-          //                    to a person who is reviewing a GitHub diff.  This rule makes writing code harder,
-          //                    but writing code is a much less important activity than reading it.
-          //
-          // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
-          '@typescript-eslint/explicit-function-return-type': [
-            'warn',
-            {
-              allowExpressions: true,
-              allowTypedFunctionExpressions: true,
-              allowHigherOrderFunctions: false
-            }
-          ],
 
           // SYNC-LABS:  Not in @typescript-eslint\eslint-plugin\dist\configs\recommended.json and removed Sync Labs
           '@typescript-eslint/explicit-member-accessibility': 'off',
@@ -364,14 +365,6 @@ function buildRules(profile) {
           // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
           '@typescript-eslint/no-array-constructor': 'warn',
 
-          // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
-          //
-          // RATIONALE:         The "any" keyword disables static type checking, the main benefit of using TypeScript.
-          //                    This rule should be suppressed only in very special cases such as JSON.stringify()
-          //                    where the type really can be anything.  Even if the type is flexible, another type
-          //                    may be more appropriate such as "unknown", "{}", or "Record<k,V>".
-          '@typescript-eslint/no-explicit-any': ['warn',{ "ignoreRestArgs": true }],
-
           // RATIONALE:         The #1 rule of promises is that every promise chain must be terminated by a catch()
           //                    handler.  Thus wherever a Promise arises, the code must either append a catch handler,
           //                    or else return the object to a caller (who assumes this responsibility).  Unterminated
@@ -416,7 +409,7 @@ function buildRules(profile) {
           //                    just to save some typing.
           //
           // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
-          '@typescript-eslint/no-parameter-properties': 'warn',
+          '@typescript-eslint/no-parameter-properties': 'off',
 
           // RATIONALE:         When left in shipping code, unused variables often indicate a mistake.  Dead code
           //                    may impact performance.
@@ -430,40 +423,6 @@ function buildRules(profile) {
               // the compiler catches most of those mistakes, and unused arguments are fairly common for type signatures
               // that are overriding a base class method or implementing an interface.
               args: 'none'
-            }
-          ],
-
-          // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
-          '@typescript-eslint/no-use-before-define': [
-            'error',
-            {
-
-              // SYNC-LABS:  Relax on order of classes like funtions
-
-              // Base ESLint options
-
-              // We set functions=false so that functions and classes can be ordered based on exported/local visibility
-              // similar to class methods.  Also the base lint rule incorrectly flags a legitimate case like:
-              //
-              //   function a(n: number): void {
-              //     if (n > 0) {
-              //       b(n-1); //   lint error
-              //     }
-              //   }
-              //   function b(n: number): void {
-              //     if (n > 0) {
-              //       a(n-1);
-              //     }
-              //   }
-              functions: false,
-              classes: false,
-              variables: true,
-
-              // TypeScript extensions
-
-              enums: true,
-              typedefs: true
-              // ignoreTypeReferences: true
             }
           ],
 
@@ -749,9 +708,6 @@ function buildRules(profile) {
           // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
           'no-var': 'error',
 
-          // RATIONALE:         Generally not needed in modern code.
-          'no-void': 'error',
-
           // RATIONALE:         Obsolete language feature that is deprecated.
           // STANDARDIZED BY:   eslint\conf\eslint-recommended.js
           'no-with': 'error',
@@ -787,8 +743,36 @@ function buildRules(profile) {
           // "no-restricted-syntax": [
           // ],
 
+          // ====================================================================
+          // SYNC-LABS ADDITIONS
+          // ====================================================================
+
           // SYNC-LABS turn off typedef-var
-          '@rushstack/typedef-var': 'off'
+          '@rushstack/typedef-var': 'off',
+
+          // SYNC-LABS IMPORTS
+          // analysis/correctness
+          'import/default': 'error',
+          'import/export': 'error',
+
+          // red flags (thus, warnings)
+          'import/no-named-as-default': 'warn',
+          'import/no-named-as-default-member': 'warn',
+
+          // style guide
+          'import/first': 'warn',
+          'import/no-duplicates': 'warn',
+          'import/order': 'warn',
+          'import/newline-after-import': 'warn',
+          'import/prefer-default-export': 'warn',
+          'import/dynamic-import-chunkname': 'error',
+
+           // updated style guide
+          '@typescript-eslint/no-use-before-define': 'off',
+          '@typescript-eslint/no-explicit-any': 'off',
+          '@typescript-eslint/explicit-function-return-type': 'off',
+          'no-void': 'off',
+          '@rushstack/no-new-null': 'warn'
         }
       },
       {

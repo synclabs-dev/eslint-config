@@ -1,5 +1,14 @@
 # Change Log - @sync-labs/eslint-config
 
+## 2.4.0 Added JS Parser and updated rules and dependencies
+Wed, 22 Aug 2022 Updated dependencies
+
+## 2.4.0
+Mon, 12 Jul 2021 23:08:26 GMT
+
+## 2.1.6 Forked from rushstack/eslint-config
+Wed, 27 Jan 2021 Updated dependencies
+
 ## 2.1.5 Forked from rushstack/eslint-config
 Tue, 28 Sep 2020 05:45:56 GMT
 
