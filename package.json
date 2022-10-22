@@ -1,6 +1,6 @@
 {
   "name": "@sync-labs/eslint-config",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "A TypeScript ESLint ruleset designed for large teams and projects",
   "license": "MIT",
   "publishConfig": {
@@ -23,27 +23,25 @@
     "typescript"
   ],
   "peerDependencies": {
-    "eslint": "^6.0.0 || ^7.0.0",
-    "prettier": "^2.0.0"
+    "eslint": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "typescript": ">=4.7.0"
   },
   "dependencies": {
-    "@rushstack/eslint-patch": "^1.0.6",
-    "@rushstack/eslint-plugin": "^0.8.0",
-    "@rushstack/eslint-plugin-security": "^0.2.0",
-    "@typescript-eslint/eslint-plugin": "4.29.2",
-    "@typescript-eslint/experimental-utils": "4.29.2",
-    "@typescript-eslint/parser": "4.29.2",
-    "@typescript-eslint/typescript-estree": "4.29.2",
-    "eslint-plugin-import": "^2.24.1",
-    "eslint-plugin-prettier": "^3.4.1",
-    "eslint-plugin-promise": "~5.1.0",
-    "eslint-plugin-react": "~7.24.0",
-    "eslint-plugin-tsdoc": "~0.2.14"
+    "@rushstack/eslint-patch": "~1.2.0",
+    "@rushstack/eslint-plugin": "~0.11.0",
+    "@rushstack/eslint-plugin-security": "~0.5.0",
+    "@typescript-eslint/eslint-plugin": "~5.38.0",
+    "@typescript-eslint/experimental-utils": "~5.38.0",
+    "@typescript-eslint/parser": "~5.38.0",
+    "@typescript-eslint/typescript-estree": "~5.38.0",
+    "eslint-plugin-promise": "~6.0.0",
+    "eslint-plugin-react": "~7.27.1",
+    "eslint-plugin-tsdoc": "~0.2.16",
+    "eslint-plugin-import": "~2.26.0",
+    "eslint-plugin-prettier": "~4.2.1"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.1",
-    "eslint": "~7.32.0",
-    "jest": "^27.0.6",
-    "typescript": "~4.3.5"
+    "eslint": "~8.7.0",
+    "typescript": "~4.8.4"
   }
 }
